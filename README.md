@@ -7,7 +7,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 > 目录
 - [🍟 GetSomeFries](#-getsomefries)
-- [🍟 Cloudflare](#-cloudflare)
+- [🍟 Cloudflare DNS](#-cloudflare-dns)
   - [简介](#简介)
   - [功能列表](#功能列表)
   - [todo](#todo)
@@ -26,14 +26,15 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
   - [简介](#简介-2)
   - [功能列表](#功能列表-2)
   - [todo](#todo-2)
+  - [使用方式](#使用方式-1)
   - [安装链接](#安装链接-2)
-    - [🧪测试版](#测试版-2)
+    - [🧪试验版，随时可能修改/删除](#试验版随时可能修改删除)
 - [鸣谢](#鸣谢)
 
 
 ---
 
-# 🍟 Cloudflare
+# 🍟 Cloudflare DNS
 ## 简介
   * Cloudflare DNS记录管理及自动更新DDNS
 
@@ -73,6 +74,7 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
       type=AAAA&name=ipv6&proxied=false
       ```
 * 配合Surge模块的`argument`字段使用:
+  * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
   * 暂不支持多记录，推荐使用BoxJs设置
   * 格式如下:
       ```
@@ -98,19 +100,19 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 ## 安装链接
 ### 正式版
   * Loon:
-    * [Cloudflare.plugin](./plugins/Cloudflare.plugin?raw=true "🍟 Cloudflare")
+    * [Cloudflare_DNS.plugin](./plugins/Cloudflare_DNS.plugin?raw=true "🍟 Cloudflare DNS")
   * Quantumult X:
-    * 下载脚本[Cloudflare.js](./js/Cloudflare.js?raw=true "🍟 Cloudflare")并保存至`Quantumult X`的`Scripts`文件夹下
+    * 下载脚本[Cloudflare_DNS.js](./js/Cloudflare_DNS.js?raw=true "🍟 Cloudflare DNS")并保存至`Quantumult X`的`Scripts`文件夹下
       * 修改配置文件，在`[task_local]`段添加如下内容：
       ```
-      event-network Cloudflare.js
-      */10 * * * * Cloudflare.js
+      event-network https://github.com/VirgilClyne/GetSomeFries/blob/main/js/Cloudflare_DNS.js?raw=true, tag=Cloudflare DNS, img-url=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Cloudflare.png, enabled=true
+      */10 * * * * https://github.com/VirgilClyne/GetSomeFries/blob/main/js/Cloudflare_DNS.js?raw=true, tag=Cloudflare DNS, img-url=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Cloudflare.png, enabled=true
       ```
   * Surge:
-    * [Cloudflare.sgmodule](./sgmodule/Cloudflare.sgmodule?raw=true "🍟 Cloudflare")
+    * [Cloudflare_DNS.sgmodule](./sgmodule/Cloudflare_DNS.sgmodule?raw=true "🍟 Cloudflare DNS")
 ### 🧪测试版
   * Surge:
-    * [Cloudflare.beta.sgmodule](./sgmodule/Cloudflare.beta.sgmodule?raw=true "🍟 Cloudflare")
+    * [Cloudflare_DNS.beta.sgmodule](./sgmodule/Cloudflare_DNS.beta.sgmodule?raw=true "🍟 Cloudflare DNS")
 
 ---
 
@@ -140,24 +142,67 @@ Telegram讨论组:[🍟 整点薯条](https://t.me/GetSomeFries)
 
 # 🍟 Netflix
 ## 简介
-  * 开启Netflix隐藏功能
+  * 自定义部分Netflix功能
 
   * 注:
-    * 凑合用,翻车别找我
+    * 试验性质
+    * 翻车别找我
+    * 部分设置可能改了也没效果
 
 ## 功能列表
-  * 强制启用VTT字幕(似乎还要指定VTT字幕服务器)
-  * 强制启用AirPlay(需要正经支持Airplay视频投屏的设备如`Apple TV`,`Sony``LG``三星`电视，国产破解Airplay的兼容方案就别想了)
-  * 强制使用Fairplay DRM
-  * 我咋知道
+  * 强制解除地区限制(可能改了也没用)
+  * 启用VTT字幕(对于Web和Android等平台,还要指定VTT字幕服务器)
+  * 启用AirPlay
+    * 需要正经支持Airplay视频投屏的设备如`Apple TV`,`Sony`、`LG`、`三星`电视，国产破解Airplay的兼容方案就别想了
+  * 允许Widevine DRM播放
+  * 其他设置内容详见[iOS平台全部设置项列表](https://github.com/VirgilClyne/GetSomeFries/wiki/iOS平台全部设置项列表)
+  * 修改当前CDN所属地区
+  * 修改当前IP地址(可能改了也没用)
+  * 修改当前IP地址是否已有用户(可能改了也没用，关系到多人共用IP封非自制内容的问题)
 
 ## todo
   * 我咋知道
 
+## 使用方式
+* 配合`BoxJs`及订阅使用
+  * 安装`BoxJs`插件:
+    * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
+    * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
+    * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+  * 导入本项目订阅: [fries.boxjs.json](./box/fries.boxjs.json?raw=true "整点薯条")
+  * 在`应用`-`整点薯条`-`Netflix`中填写需要修改Netflix的信息
+  * `配置：功能内容`段落示例如下
+    ```
+    hideAccountPaymentEnabledOnBuild=50.0.0
+    isAccountProfileLinkEnabled=true
+    allowWidevinePlayback=true
+    airPlayDisabledEnabledOnBuild=50.0.0
+    preferRichWebVTTOverImageBasedSubtitle=true
+    requestRichWebVTTAsExperimental=true
+    previewsWebVttStyleUrl=https:\/\/webvtt-s.nflxext.com\/35\/PreviewsWebVTTStyle.plist
+    iPhoneWebVttStyleUrl=https:\/\/webvtt-s.nflxext.com\/35\/iPhoneWebVTTStyle.plist
+    iPadWebVttStyleUrl=https:\/\/webvtt-s.nflxext.com\/35\/iPadWebVTTStyle.plist
+    ```
+* 配合Surge模块的`argument`字段使用:
+  * 使用[@baranwang](https://github.com/baranwang)的[Surge模块Argument代理](https://sgmodule-argument-proxy.vercel.app/)直接生成带配置的专属模块[使用说明](https://github.com/baranwang/sgmodule-argument-proxy#readme)
+  * 暂不支持多记录，推荐使用BoxJs设置
+  * 格式如下:
+      ```
+      argument=懒得写
+      ```
+      例如:
+      ```
+      argument=geolocation_policy=ALLOW&geolocation_country=SG&onfig_allowWidevinePlayback=true&config_airPlayDisabledEnabledOnBuild=50.0.0&config_preferRichWebVTTOverImageBasedSubtitle=true&config_reuseAVPlayerEnabledOnBuild=0&config_nfplayerReduxEnabledOnBuild=50.0.0
+      ```
+
 ## 安装链接
-### 🧪测试版
+### 🧪试验版，随时可能修改/删除
+  * Loon:
+    * [Netflix.beta.plugin](./plugins/Netflix.beta.plugin?raw=true "🍟 Netflix")
+  * Quantumult X:
+    * [Netflix.beta.qxrewrite](./qxrewrite/Netflix.beta.qxrewrite?raw=true "🍟 Netflix")
   * Surge:
-    * [Netflix.beta.sgmodule](./sgmodule/Netflix.beta.sgmodule?raw=true "🍟 Unlock Netflix Hidden Feature")
+    * [Netflix.beta.sgmodule](./sgmodule/Netflix.beta.sgmodule?raw=true "🍟 Netflix")
 
 ---
 
