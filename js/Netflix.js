@@ -4,54 +4,22 @@ README:https://github.com/VirgilClyne/GetSomeFries
 
 const $ = new Env('Netflix');
 
-// Default Settings
-$.Netflix = {
-	"geolocation": {
-		"policy": "ALLOW", //策略
-		"country": "" // 国家
-	},
-	"config": {
-		"allowWidevinePlayback": true, // 允许Widevine DRM回放
-		"airPlayDisabledEnabledOnBuild": "50.0.0", // 开始禁用airPlay的版本
-		"preferRichWebVTTOverImageBasedSubtitle": true, // 偏好使用RichWebVTT字幕多于图片字幕
-		"requestRichWebVTTAsExperimental": true, //试验性请求RichWebVTT字幕
-		"reuseAVPlayerEnabledOnBuild": "0", // 重新开始启用AVPlayer的版本
-		"nfplayerReduxEnabledOnBuild": "50.0.0", // 开始启用nfplayerRedux的版本
-	},
-	"ctx": {
-		"region": "", // 当前IP所属地区
-		//"monotonic": true, // 函数？
-		"device": "", // 当前使用设备
-		//"isolate_pool": true, // 隔离池？
-		//"iter": 0,
-		//"abtests":55, // AB测试
-		//"ts":1642392069933, // timestamp？
-		"ip": "",
-		"hasUser": false // 当前IP是否有用户
-	}
-};
-// BoxJs Function Supported
-if ($.getdata("GetSomeFries")) {
-	$.log(`🎉 ${$.name}, BoxJs`);
+if ($.getdata("GetSomeFries") !== null) {
+	// BoxJs Function Supported
 	// load user prefs from BoxJs
-	const GetSomeFries = $.getdata("GetSomeFries")
-	$.log(`🚧 ${$.name}, BoxJs调试信息, GetSomeFries类型: ${typeof GetSomeFries}`, `GetSomeFries内容: ${GetSomeFries}`, "");
-	if (JSON.parse($.getdata("GetSomeFries"))?.Netflix) {
-		$.Netflix = JSON.parse($.getdata("GetSomeFries")).Netflix
-		$.log('before, Netflix:' + JSON.stringify($.Netflix))
-		if ($.Netflix.config) {
-			//$.log('before, Netflix.config:' + JSON.stringify($.Netflix.config))
-			$.Netflix.config = Object.fromEntries($.Netflix.config.split("\n").map((item) => item.split("=")));
-			//$.log('middle, Netflix.config:' + JSON.stringify($.Netflix.config))
-			for (var item in $.Netflix.config) $.Netflix.config[item] = ($.Netflix.config[item] == "true") ? true : ($.Netflix.config[item] == "false") ? false : $.Netflix.config[item];
-			//$.log('after, Netflix.config:' + JSON.stringify($.Netflix.config))
-		};
-		if ($.Netflix.ctx.hasUser != "AUTO") $.Netflix.ctx.hasUser = JSON.parse($.Netflix.ctx.hasUser);
-		$.log('after, Netflix:' + JSON.stringify($.Netflix));
-	}
-}
-// Argument Function Supported
-else if (typeof $argument != "undefined") {
+	$.Netflix = JSON.parse($.getdata("GetSomeFries")).Netflix
+	$.log('before, Netflix:' + JSON.stringify($.Netflix))
+	if ($.Netflix.config) {
+		//$.log('before, Netflix.config:' + JSON.stringify($.Netflix.config))
+		$.Netflix.config = Object.fromEntries($.Netflix.config.split("\n").map((item) => item.split("=")));
+		//$.log('middle, Netflix.config:' + JSON.stringify($.Netflix.config))
+		for (var item in $.Netflix.config) $.Netflix.config[item] = ($.Netflix.config[item] == "true") ? true : ($.Netflix.config[item] == "false") ? false : $.Netflix.config[item];
+		//$.log('after, Netflix.config:' + JSON.stringify($.Netflix.config))
+	};
+	if ($.Netflix.ctx.hasUser != "AUTO") $.Netflix.ctx.hasUser = JSON.parse($.Netflix.ctx.hasUser);
+	$.log('after, Netflix:' + JSON.stringify($.Netflix));
+} else if (typeof $argument != "undefined") {
+	// Argument Function Supported
 	let arg = Object.fromEntries($argument.split("&").map((item) => item.split("=")));
 	$.log(JSON.stringify(arg));
 	$.Netflix.geolocation.policy = (arg.geolocation_policy == "AUTO") ? $.Netflix.geolocation.policy : arg.geolocation_policy
@@ -71,8 +39,34 @@ else if (typeof $argument != "undefined") {
 	$.Netflix.ctx.device = (arg.ctx_device == "AUTO") ? $.Netflix.ctx.device : arg.ctx_device;
 	$.Netflix.ctx.ip = arg.ctx_ip;
 	$.Netflix.ctx.hasUser = (arg.ctx_hasUser == "AUTO") ? $.Netflix.ctx.hasUser : JSON.parse(arg.ctx_hasUser);
+} else {
+	// Default Settings
+	$.Netflix = {
+		"geolocation": {
+			"policy": "ALLOW", //策略
+			"country": "" // 国家
+		},
+		"config": {
+			"allowWidevinePlayback": true, // 允许Widevine DRM回放
+			"airPlayDisabledEnabledOnBuild": "50.0.0", // 开始禁用airPlay的版本
+			"preferRichWebVTTOverImageBasedSubtitle": true, // 偏好使用RichWebVTT字幕多于图片字幕
+			"requestRichWebVTTAsExperimental": true, //试验性请求RichWebVTT字幕
+			"reuseAVPlayerEnabledOnBuild": "0", // 重新开始启用AVPlayer的版本
+			"nfplayerReduxEnabledOnBuild": "50.0.0", // 开始启用nfplayerRedux的版本
+		},
+		"ctx": {
+			"region": "", // 当前IP所属地区
+			//"monotonic": true, // 函数？
+			"device": "", // 当前使用设备
+			//"isolate_pool": true, // 隔离池？
+			//"iter": 0,
+			//"abtests":55, // AB测试
+			//"ts":1642392069933, // timestamp？
+			"ip": "",
+			"hasUser": false // 当前IP是否有用户
+		}
+	}
 };
-$.log(`🚧 ${$.name}, BoxJs调试信息, $.Netflix内容: ${JSON.stringify($.Netflix)}`);
 
 const url = $request.url;
 var body = $response.body;
@@ -85,7 +79,7 @@ if (url.search(path1) != -1) {
 	$.log(path1);
 	let content = JSON.parse(body);
 	if (content.value?.geolocation?.policy) content.value.geolocation.policy = 	($.Netflix.geolocation.policy != "AUTO") ? $.Netflix.geolocation.policy : content.value.geolocation.policy;
-	if (content.value?.geolocation?.country) content.value.geolocation.country = $.Netflix?.geolocation?.country ?? content.value.geolocation.country;
+	if (content.value?.geolocation?.country) content.value.geolocation.country = $.Netflix.geolocation.country ? $.Netflix.geolocation.country : content.value.geolocation.country;
 	if (content.value?.geolocation) $.msg($.name, `已修改配置文件链接`, `策略: ${content.value.geolocation.policy}, 国家: ${content.value.geolocation.country}`)
 	if (content.value?.config !== undefined && $.Netflix.value?.config !== undefined) {
 		content.value.config = Object.assign(content.value.config, $.Netflix.value.config);
@@ -110,9 +104,9 @@ if (url.search(path1) != -1) {
 else if (url.search(path2) != -1) {
 	$.log(path2);
 	let content = JSON.parse(body);
-	if (content.ctx?.region) content.ctx.region = $.Netflix?.ctx?.region ?? content?.ctx?.region;
-	if (content.ctx?.device) content.ctx.device = ($.Netflix.ctx.device != "AUTO") ? $.Netflix?.ctx?.device : content.ctx.device;
-	if (content.ctx?.ip) content.ctx.ip = $.Netflix?.ctx?.ip ?? content?.ctx?.ip;
+	if (content.ctx?.region) content.ctx.region = $.Netflix.ctx.region ? $.Netflix.ctx.region : content.ctx.region;
+	if (content.ctx?.device) content.ctx.device = ($.Netflix.ctx.device != "AUTO") ? $.Netflix.ctx.device : content.ctx.device;
+	if (content.ctx?.ip) content.ctx.ip = $.Netflix.ctx.ip ? $.Netflix.ctx.ip : content.ctx.ip;
 	if (content.ctx?.hasUser !== undefined) {
 		$.log('before, hasUser:' + content.ctx.hasUser);
 		content.ctx.hasUser = ($.Netflix.ctx.hasUser != "AUTO") ? $.Netflix.ctx.hasUser : content.ctx.hasUser;
@@ -124,6 +118,7 @@ else if (url.search(path2) != -1) {
 }
 
 else $.done();
+
 
 /***************** Env *****************/
 // prettier-ignore
